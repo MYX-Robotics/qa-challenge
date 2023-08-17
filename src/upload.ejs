@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Lato:100,200,300,400,500,600,700' rel='stylesheet' type='text/css'>
+        <style>
+            body {
+                font-family: lato;
+                margin: 0;
+            }
+            header {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px;
+                background-color: rgb(230, 230, 230);
+                box-shadow: 0px 3px 10px -6px rgba(0,0,0,0.77);
+                margin-bottom: 24px;
+            }
+            table, th, td {
+                border: 1px solid;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <span> Upload </span>
+            <span> Logged in as <%= user.email %> </span>
+        </header>
+
+        <div id="warnings"></div>
+
+        <input id="twin-name" placeholder="Twin name" name="name">
+
+        <br>
+        <input type="file" id="file-upload">
+
+        <div id="tables"></div>
+
+<script>
+    function showWarning(file) {
+        document.querySelector('#warnings').innerText += `File ${file.name} is of type ${file.type}, but we want jpegs!\n`;
+    }
+
+    document.querySelector('#file-upload').addEventListener('input', async (ev) => {
+        
+        <% if(user.type !== 'enterprise') { %>
+            for(const file of ev.target.files) {
+                if(file.type !== 'image/jpeg') { 
+                    showWarning(file);
+                    return;
+                }
+            }
+        <% } %> 
+        const twinName = document.getElementById('twin-name').value;
+
+        if (twinName === '') {
+            alert("Twin name can not be empty.");
+            return;
+        }
+
+        for(const file of ev.target.files) { 
+            const res = await fetch('/upload/file', {
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({twinName, fileName: file.name})
+                });
+        }
+        
+        window.location.reload();   
+        });
+
+    function createTableWithTitle (tableName, files) {
+        const tableDiv = document.createElement('div');
+        const title = document.createElement('h3');
+        title.innerText = tableName;
+        const table = document.createElement('table');
+       
+        files.forEach((item) => {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.textContent = item;
+            row.appendChild(cell);
+            table.appendChild(row);
+        });
+
+        tableDiv.appendChild(title);
+        tableDiv.appendChild(table);
+
+        return tableDiv;
+    }
+
+    async function loadTwins(){
+        const tablesContainer = document.getElementById('tables');
+        
+        const twins = await (await fetch('/twins')).json();
+        
+        for (const [twinName, files] of Object.entries(twins)){
+            if (files.length) {
+                tablesContainer.appendChild(createTableWithTitle(twinName, files));
+            }
+        }
+    }
+
+    loadTwins();
+    
+        </script>
+    </body>
+</html>

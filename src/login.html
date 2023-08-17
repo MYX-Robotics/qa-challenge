@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Lato:100,200,300,400,500,600,700' rel='stylesheet' type='text/css'>
+        <style>
+            body {
+                font-family: lato;
+                margin: 0;
+            }
+            .wrapper {
+                background-color: rgb(230, 230, 230);
+                border-radius: 5px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 24px;
+            }
+
+            .wrapper > * {
+                margin-bottom: 10px;
+            }
+
+            .centered {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </head>
+    <body>
+        <form class="wrapper centered" action="/login" method="post">
+            <h1> Login </h1>
+            <label for="type">Email *</label>
+            <input type="email"    placeholder="Email"    name="email" required/>
+            <label for="type">Password *</label>
+            <input type="password" placeholder="Password" name="password" required/>
+            <input type="submit" value="Sign in">
+            <p class="center">Don't have an account? Register <a href="/register">here</a>.</p>
+        </form>
+    </body>
+</html>
